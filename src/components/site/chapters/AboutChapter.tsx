@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { SapokMark, SapokWordmark } from "@/components/brand/SapokMarks";
+import { Button } from "@/components/ui/button";
 import type { ChapterProps } from "../chapters";
 import { ChapterHead, Rise, chapterPad } from "./ChapterHead";
 
@@ -82,12 +83,10 @@ export default function AboutChapter({ content, go }: ChapterProps) {
               </div>
             </div>
             <div className="relative mt-6 flex flex-wrap gap-3">
-              <button onClick={() => go("contact")} className="btn-primary">
-                Talk to us
-              </button>
-              <button onClick={() => go("purpose")} className="btn-ghost">
+              <Button onClick={() => go("contact")}>Talk to us</Button>
+              <Button variant="outline" onClick={() => go("purpose")}>
                 Our mission
-              </button>
+              </Button>
             </div>
           </Rise>
         </div>

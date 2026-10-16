@@ -10,6 +10,7 @@ import { useSceneScroll } from "./useChapterScroll";
 import Cursor from "./Cursor";
 import BootScreen from "./BootScreen";
 import ThemeToggle from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
 import IdeaChapter from "./chapters/IdeaChapter";
 import EcosystemChapter from "./chapters/EcosystemChapter";
 import ServicesChapter from "./chapters/ServicesChapter";
@@ -142,9 +143,9 @@ export default function Experience({ content }: { content: SiteContent }) {
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => go("contact")} className="btn-primary hidden !py-2.5 sm:inline-flex">
+          <Button onClick={() => go("contact")} className="hidden sm:inline-flex">
             Start a project
-          </button>
+          </Button>
           <ThemeToggle />
           <button onClick={() => setMenuOpen(true)} aria-label="Open chapters" className="grid size-10 place-items-center rounded-full border border-line text-paper transition hover:border-teal hover:text-teal">
             <Menu className="size-4" />

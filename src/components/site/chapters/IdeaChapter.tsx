@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Check, CornerDownLeft, RotateCcw, Sparkles } from "lucide-react";
 import type { ChapterProps } from "../chapters";
+import { Button } from "@/components/ui/button";
 import { Rise, chapterPad } from "./ChapterHead";
 
 type Phase = "idle" | "thinking" | "designing" | "building" | "live";
@@ -157,28 +158,28 @@ export default function IdeaChapter({ content, go, setIdea }: ChapterProps) {
                 aria-label="Describe your idea"
                 className="min-w-0 flex-1 bg-transparent font-mono text-sm text-paper outline-none placeholder:text-muted sm:text-base"
               />
-              <button type="submit" className="btn-primary shrink-0 !px-4 !py-2.5" aria-label="Build my idea">
+              <Button type="submit" className="shrink-0" aria-label="Build my idea">
                 <span className="hidden sm:inline">Build it</span>
-                <CornerDownLeft className="size-4" />
-              </button>
+                <CornerDownLeft />
+              </Button>
             </label>
           </form>
           <p className="mt-3 font-mono text-[11px] text-faint">Type any idea and press enter — watch it come to life.</p>
         </Rise>
 
         <Rise step={5} className="mt-8 flex flex-wrap gap-3">
-          <button
+          <Button
+            size="lg"
             onClick={() => {
               setIdea(built || value);
               go("contact");
             }}
-            className="btn-primary"
           >
-            Start a project <ArrowRight className="size-4" />
-          </button>
-          <button onClick={() => go("ecosystem")} className="btn-ghost">
+            Start a project <ArrowRight />
+          </Button>
+          <Button size="lg" variant="outline" onClick={() => go("ecosystem")}>
             See our products
-          </button>
+          </Button>
         </Rise>
       </div>
 
@@ -307,18 +308,18 @@ export default function IdeaChapter({ content, go, setIdea }: ChapterProps) {
                     <span className="block text-sm font-semibold">It&apos;s real.</span>
                     <span className="block truncate font-mono text-[10px] text-muted">{appName(built)} · deployed</span>
                   </span>
-                  <button
+                  <Button
+                    size="sm"
                     onClick={() => {
                       setIdea(built);
                       go("contact");
                     }}
-                    className="btn-primary !px-3 !py-2 text-xs"
                   >
                     Make it mine
-                  </button>
-                  <button onClick={() => build(built)} aria-label="Replay" className="grid size-8 place-items-center rounded-full border border-line text-muted hover:text-teal">
-                    <RotateCcw className="size-3.5" />
-                  </button>
+                  </Button>
+                  <Button variant="outline" size="icon-sm" className="rounded-full" onClick={() => build(built)} aria-label="Replay">
+                    <RotateCcw />
+                  </Button>
                 </motion.div>
               )}
             </AnimatePresence>

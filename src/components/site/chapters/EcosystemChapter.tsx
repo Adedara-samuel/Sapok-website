@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { PRODUCT_MARKS, SapokMark } from "@/components/brand/SapokMarks";
+import { Button } from "@/components/ui/button";
 import type { ChapterProps } from "../chapters";
 import { ChapterHead, Rise, chapterPad } from "./ChapterHead";
 
@@ -141,19 +142,20 @@ export default function EcosystemChapter({ content, go, setIdea }: ChapterProps)
               </ul>
               <div className="mt-7 flex flex-wrap gap-3">
                 {p.link ? (
-                  <a href={p.link} target="_blank" rel="noopener noreferrer" className="btn-primary">
-                    Open {p.name} <ArrowUpRight className="size-4" />
-                  </a>
+                  <Button asChild>
+                    <a href={p.link} target="_blank" rel="noopener noreferrer">
+                      Open {p.name} <ArrowUpRight />
+                    </a>
+                  </Button>
                 ) : (
-                  <button
+                  <Button
                     onClick={() => {
                       setIdea(`Early access to ${p.name}`);
                       go("contact");
                     }}
-                    className="btn-primary"
                   >
-                    Get early access <ArrowUpRight className="size-4" />
-                  </button>
+                    Get early access <ArrowUpRight />
+                  </Button>
                 )}
               </div>
               {/* product tour progress */}
