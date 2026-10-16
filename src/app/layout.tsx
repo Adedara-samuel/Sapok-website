@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Montserrat } from "next/font/google";
-import { themeScript } from "@/components/ThemeToggle";
+import { themeScript } from "@/lib/theme";
 import "./globals.css";
 
 const sans = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });

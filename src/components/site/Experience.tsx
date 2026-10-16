@@ -8,6 +8,7 @@ import { SapokMark, SapokWordmark } from "@/components/brand/SapokMarks";
 import { CHAPTERS, type ChapterId } from "./chapters";
 import { useSceneScroll } from "./useChapterScroll";
 import Cursor from "./Cursor";
+import ThemeToggle from "@/components/ThemeToggle";
 import IdeaChapter from "./chapters/IdeaChapter";
 import EcosystemChapter from "./chapters/EcosystemChapter";
 import ServicesChapter from "./chapters/ServicesChapter";
@@ -140,6 +141,7 @@ export default function Experience({ content }: { content: SiteContent }) {
           <button onClick={() => go("contact")} className="btn-primary hidden !py-2.5 sm:inline-flex">
             Start a project
           </button>
+          <ThemeToggle />
           <button onClick={() => setMenuOpen(true)} aria-label="Open chapters" className="grid size-10 place-items-center rounded-full border border-line text-paper transition hover:border-teal hover:text-teal">
             <Menu className="size-4" />
           </button>

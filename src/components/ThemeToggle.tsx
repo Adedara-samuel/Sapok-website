@@ -2,14 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
-
-export const THEME_KEY = "sapok-theme";
-
-/**
- * Runs before paint (inlined in <head>) so the saved or system theme applies with no flash.
- * Keep it tiny and dependency-free.
- */
-export const themeScript = `(function(){try{var t=localStorage.getItem("${THEME_KEY}");if(!t){t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}if(t==="light")document.documentElement.classList.add("light")}catch(e){}})();`;
+import { THEME_KEY } from "@/lib/theme";
 
 function subscribe(cb: () => void) {
   const obs = new MutationObserver(cb);

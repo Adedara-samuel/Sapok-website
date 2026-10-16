@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ExternalLink, Inbox, LayoutDashboard, LogOut, Menu, PenSquare, X } from "lucide-react";
 import { SapokMark, SapokWordmark } from "@/components/brand/SapokMarks";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", cmd: "dash", icon: LayoutDashboard },
@@ -137,6 +138,7 @@ export default function AdminShell({ status, children }: { status: SystemStatus;
           <span className="ml-auto hidden font-mono text-[11px] text-muted sm:block">
             <Clock />
           </span>
+          <ThemeToggle className="ml-auto size-9 sm:ml-0" />
         </header>
         <main className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">{children}</main>
       </div>

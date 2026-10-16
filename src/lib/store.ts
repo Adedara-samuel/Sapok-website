@@ -11,7 +11,16 @@ import { contentSchema, defaultContent, type Enquiry, type EnquiryInput, type En
  * The file fallback is refused in production because serverless file systems are read-only.
  */
 
+export interface AdminRecord {
+  email: string;
+  /** scrypt hash: "scrypt$<salt>$<hash>" */
+  passwordHash: string;
+  updatedAt: string;
+}
+
 interface Store {
+  getAdmin(): Promise<AdminRecord | null>;
+  setAdmin(admin: AdminRecord): Promise<void>;
   getContent(): Promise<SiteContent>;
   saveContent(content: SiteContent): Promise<void>;
   addEnquiry(input: Omit<EnquiryInput, "website">, emailed: boolean): Promise<Enquiry>;
@@ -30,6 +39,7 @@ function withDefaults(stored: unknown): SiteContent {
 /* ---------------------------------- MongoDB --------------------------------- */
 
 type ContentDoc = { _id: string; content: SiteContent; updatedAt: Date };
+type AdminDoc = AdminRecord & { _id: string };
 type EnquiryDoc = Omit<Enquiry, "id"> & { _id: string };
 
 const g = globalThis as unknown as { __sapokMongo?: Promise<MongoClient> };
@@ -40,12 +50,22 @@ async function collections() {
   return {
     site: db.collection<ContentDoc>("site"),
     enquiries: db.collection<EnquiryDoc>("enquiries"),
+    admins: db.collection<AdminDoc>("admins"),
   };
 }
 
 const toEnquiry = ({ _id, ...rest }: EnquiryDoc): Enquiry => ({ id: _id, ...rest });
 
 const mongoStore: Store = {
+  async getAdmin() {
+    const { admins } = await collections();
+    const doc = await admins.findOne({ _id: "owner" });
+    return doc ? { email: doc.email, passwordHash: doc.passwordHash, updatedAt: doc.updatedAt } : null;
+  },
+  async setAdmin(admin) {
+    const { admins } = await collections();
+    await admins.updateOne({ _id: "owner" }, { $set: admin }, { upsert: true });
+  },
   async getContent() {
     const { site } = await collections();
     return withDefaults((await site.findOne({ _id: "content" }))?.content);
@@ -83,6 +103,7 @@ const mongoStore: Store = {
 const DATA_DIR = path.join(process.cwd(), ".data");
 const CONTENT_FILE = path.join(DATA_DIR, "content.json");
 const ENQUIRIES_FILE = path.join(DATA_DIR, "enquiries.json");
+const ADMIN_FILE = path.join(DATA_DIR, "admin.json");
 
 async function readJson<T>(file: string, fallback: T): Promise<T> {
   try {
@@ -100,6 +121,12 @@ async function writeJson(file: string, data: unknown) {
 }
 
 const fileStore: Store = {
+  async getAdmin() {
+    return readJson<AdminRecord | null>(ADMIN_FILE, null);
+  },
+  async setAdmin(admin) {
+    await writeJson(ADMIN_FILE, admin);
+  },
   async getContent() {
     return withDefaults(await readJson<unknown>(CONTENT_FILE, null));
   },

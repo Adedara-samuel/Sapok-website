@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2, Lock, ShieldCheck } from "lucide-react";
 import { SapokMark, SapokWordmark } from "@/components/brand/SapokMarks";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -29,6 +30,7 @@ export default function LoginForm() {
     <div className="relative grid min-h-dvh place-items-center overflow-hidden bg-ink px-4">
       <div aria-hidden className="aurora" />
       <div aria-hidden className="grid-floor pointer-events-none absolute inset-0 opacity-60" />
+      <ThemeToggle className="absolute right-4 top-4 z-10" />
 
       <motion.div initial={{ opacity: 0, y: 20, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.6 }} className="panel relative w-full max-w-md overflow-hidden">
         <div className="flex items-center gap-2 border-b border-line px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
