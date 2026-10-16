@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowDown, ArrowUp, Check, ExternalLink, Loader2, Plus, RotateCcw, Save, Trash2 } from "lucide-react";
 import { productMarks, type SiteContent } from "@/lib/content";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 /* ---------------------------- tiny form kit ---------------------------- */
 
@@ -21,17 +25,17 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 
 function Text({ value, onChange, area, placeholder }: { value: string; onChange: (v: string) => void; area?: boolean; placeholder?: string }) {
   return area ? (
-    <textarea className="field min-h-24 resize-y" value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+    <Textarea className="min-h-24" value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
   ) : (
-    <input className="field" value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+    <Input value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
   );
 }
 
 /** String list edited one item per line. */
 function Lines({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
   return (
-    <textarea
-      className="field min-h-24 resize-y font-mono text-sm"
+    <Textarea
+      className="min-h-24 font-mono text-sm md:text-sm"
       value={value.join("\n")}
       onChange={(e) => onChange(e.target.value.split("\n"))}
       onBlur={() => onChange(value.map((s) => s.trim()).filter(Boolean))}
@@ -53,22 +57,22 @@ function Repeater<T>({ items, onChange, blank, title, render }: { items: T[]; on
           <div className="flex items-center gap-2 border-b border-line px-4 py-2">
             <span className="font-mono text-[10px] text-teal">[{String(i).padStart(2, "0")}]</span>
             <span className="flex-1 truncate text-sm font-semibold">{title(item, i) || "Untitled"}</span>
-            <button type="button" disabled={i === 0} onClick={() => move(i, -1)} className="grid size-7 place-items-center rounded-md text-muted hover:text-paper disabled:opacity-25" aria-label="Move up">
-              <ArrowUp className="size-3.5" />
-            </button>
-            <button type="button" disabled={i === items.length - 1} onClick={() => move(i, 1)} className="grid size-7 place-items-center rounded-md text-muted hover:text-paper disabled:opacity-25" aria-label="Move down">
-              <ArrowDown className="size-3.5" />
-            </button>
-            <button type="button" onClick={() => onChange(items.filter((_, j) => j !== i))} className="grid size-7 place-items-center rounded-md text-muted hover:text-coral" aria-label="Remove">
-              <Trash2 className="size-3.5" />
-            </button>
+            <Button type="button" variant="ghost" size="icon-sm" disabled={i === 0} onClick={() => move(i, -1)} aria-label="Move up">
+              <ArrowUp />
+            </Button>
+            <Button type="button" variant="ghost" size="icon-sm" disabled={i === items.length - 1} onClick={() => move(i, 1)} aria-label="Move down">
+              <ArrowDown />
+            </Button>
+            <Button type="button" variant="ghost" size="icon-sm" className="hover:text-coral" onClick={() => onChange(items.filter((_, j) => j !== i))} aria-label="Remove">
+              <Trash2 />
+            </Button>
           </div>
           <div className="grid gap-3 p-4 sm:grid-cols-2">{render(item, (v) => onChange(items.map((x, j) => (j === i ? v : x))))}</div>
         </div>
       ))}
-      <button type="button" onClick={() => onChange([...items, structuredClone(blank)])} className="btn-ghost w-full !border-dashed">
-        <Plus className="size-4" /> Add item
-      </button>
+      <Button type="button" variant="outline" className="h-11 w-full border-dashed" onClick={() => onChange([...items, structuredClone(blank)])}>
+        <Plus /> Add item
+      </Button>
     </div>
   );
 }
@@ -120,9 +124,11 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
           <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight">Website content</h1>
           <p className="mt-1 text-sm text-muted">Changes go live on the site the moment you save.</p>
         </div>
-        <a href="/" target="_blank" className="btn-ghost !py-2 text-sm">
-          <ExternalLink className="size-4" /> Preview site
-        </a>
+        <Button asChild variant="outline">
+          <a href="/" target="_blank">
+            <ExternalLink /> Preview site
+          </a>
+        </Button>
       </div>
 
       <div className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1">
@@ -170,13 +176,13 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
                 </Field>
               ))}
               <div className="flex gap-2">
-                <button type="button" className="btn-ghost !py-2 text-sm" onClick={() => patch("about", { ...c.about, paragraphs: [...c.about.paragraphs, ""] })}>
-                  <Plus className="size-4" /> Paragraph
-                </button>
+                <Button type="button" variant="outline" onClick={() => patch("about", { ...c.about, paragraphs: [...c.about.paragraphs, ""] })}>
+                  <Plus /> Paragraph
+                </Button>
                 {c.about.paragraphs.length > 1 && (
-                  <button type="button" className="btn-ghost !py-2 text-sm" onClick={() => patch("about", { ...c.about, paragraphs: c.about.paragraphs.slice(0, -1) })}>
-                    <Trash2 className="size-4" /> Remove last
-                  </button>
+                  <Button type="button" variant="outline" onClick={() => patch("about", { ...c.about, paragraphs: c.about.paragraphs.slice(0, -1) })}>
+                    <Trash2 /> Remove last
+                  </Button>
                 )}
               </div>
             </div>
@@ -213,7 +219,7 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
                 <>
                   <Field label="Title"><Text value={v.title} onChange={(x) => set({ ...v, title: x })} /></Field>
                   <Field label="Tags" hint="comma separated">
-                    <input className="field" value={v.tags.join(", ")} onChange={(e) => set({ ...v, tags: e.target.value.split(",").map((t) => t.trimStart()) })} onBlur={() => set({ ...v, tags: v.tags.map((t) => t.trim()).filter(Boolean) })} />
+                    <Input value={v.tags.join(", ")} onChange={(e) => set({ ...v, tags: e.target.value.split(",").map((t) => t.trimStart()) })} onBlur={() => set({ ...v, tags: v.tags.map((t) => t.trim()).filter(Boolean) })} />
                   </Field>
                   <div className="sm:col-span-2"><Field label="Description"><Text area value={v.body} onChange={(x) => set({ ...v, body: x })} /></Field></div>
                 </>
@@ -247,14 +253,20 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
                   <Field label="Name"><Text value={v.name} onChange={(x) => set({ ...v, name: x })} /></Field>
                   <Field label="Category"><Text value={v.category} onChange={(x) => set({ ...v, category: x })} /></Field>
                   <Field label="Status">
-                    <select className="field" value={v.status} onChange={(e) => set({ ...v, status: e.target.value as typeof v.status })}>
-                      {["Live", "In progress", "Coming soon"].map((s) => <option key={s}>{s}</option>)}
-                    </select>
+                    <Select value={v.status} onValueChange={(x) => set({ ...v, status: x as typeof v.status })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {["Live", "In progress", "Coming soon"].map((st) => <SelectItem key={st} value={st}>{st}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
                   </Field>
                   <Field label="Logo">
-                    <select className="field" value={v.mark} onChange={(e) => set({ ...v, mark: e.target.value as typeof v.mark })}>
-                      {productMarks.map((m) => <option key={m}>{m}</option>)}
-                    </select>
+                    <Select value={v.mark} onValueChange={(x) => set({ ...v, mark: x as typeof v.mark })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {productMarks.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
                   </Field>
                   <Field label="Link" hint="leave empty → “Get early access”"><Text value={v.link} onChange={(x) => set({ ...v, link: x })} placeholder="https://" /></Field>
                   <Field label="Slug" hint="a-z, 0-9, dashes"><Text value={v.slug} onChange={(x) => set({ ...v, slug: x.toLowerCase() })} /></Field>
@@ -295,7 +307,7 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
               title={(v) => `${v.value}${v.suffix} ${v.label}`}
               render={(v, set) => (
                 <>
-                  <Field label="Number"><input type="number" min={0} className="field" value={v.value} onChange={(e) => set({ ...v, value: Math.max(0, Math.round(Number(e.target.value) || 0)) })} /></Field>
+                  <Field label="Number"><Input type="number" min={0} value={v.value} onChange={(e) => set({ ...v, value: Math.max(0, Math.round(Number(e.target.value) || 0)) })} /></Field>
                   <Field label="Suffix" hint="+, %, k…"><Text value={v.suffix} onChange={(x) => set({ ...v, suffix: x })} /></Field>
                   <div className="sm:col-span-2"><Field label="Label"><Text value={v.label} onChange={(x) => set({ ...v, label: x })} /></Field></div>
                 </>
@@ -345,13 +357,13 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
               "✓ everything is saved"
             )}
           </span>
-          <button type="button" disabled={!dirty || state === "saving"} onClick={() => setC(saved)} className="btn-ghost !py-2 text-sm disabled:opacity-40">
-            <RotateCcw className="size-4" /> Discard
-          </button>
-          <button type="button" disabled={!dirty || state === "saving"} onClick={save} className="btn-primary !py-2 text-sm">
-            {state === "saving" ? <Loader2 className="size-4 animate-spin" /> : state === "saved" ? <Check className="size-4" /> : <Save className="size-4" />}
+          <Button type="button" variant="outline" disabled={!dirty || state === "saving"} onClick={() => setC(saved)}>
+            <RotateCcw /> Discard
+          </Button>
+          <Button type="button" disabled={!dirty || state === "saving"} onClick={save}>
+            {state === "saving" ? <Loader2 className="animate-spin" /> : state === "saved" ? <Check /> : <Save />}
             Save &amp; publish
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -5,6 +5,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Check, Loader2, Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react";
 import { phoneDigits } from "@/lib/content";
 import { SapokWordmark } from "@/components/brand/SapokMarks";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import type { ChapterProps } from "../chapters";
 import { ChapterHead, Rise, chapterPad } from "./ChapterHead";
 
@@ -26,7 +31,7 @@ export default function ContactChapter({ content, idea }: ChapterProps) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");
 
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setForm({ ...form, [k]: e.target.value });
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm({ ...form, [k]: e.target.value });
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,48 +72,81 @@ export default function ContactChapter({ content, idea }: ChapterProps) {
                 <p className="mt-4 font-mono text-[11px] text-faint">&gt; enquiry.status = &quot;received&quot; ✓</p>
               </motion.div>
             ) : (
-              <motion.form key="form" onSubmit={submit} className="grid gap-3 sm:grid-cols-2" exit={{ opacity: 0 }} data-swipe-ignore>
+              <motion.form key="form" onSubmit={submit} className="grid gap-4 sm:grid-cols-2" exit={{ opacity: 0 }} data-swipe-ignore>
                 {idea ? (
                   <p className="font-mono text-xs text-teal sm:col-span-2">
                     &gt; idea loaded: <span className="text-paper">“{idea}”</span>
                   </p>
                 ) : null}
-                <input className="field" placeholder="Full name *" aria-label="Full name" required value={form.name} onChange={set("name")} maxLength={100} />
-                <input className="field" type="email" placeholder="Email *" aria-label="Email" required value={form.email} onChange={set("email")} maxLength={160} />
-                <input className="field" type="tel" placeholder="Phone (optional)" aria-label="Phone" value={form.phone} onChange={set("phone")} maxLength={40} />
-                <input className="field" placeholder="Company (optional)" aria-label="Company" value={form.company} onChange={set("company")} maxLength={120} />
-                <select className="field" aria-label="What do you need?" value={form.service} onChange={set("service")}>
-                  <option value="">What do you need?</option>
-                  {content.services.map((s) => (
-                    <option key={s.title}>{s.title}</option>
-                  ))}
-                  <option>Something else</option>
-                </select>
-                <select className="field" aria-label="Budget" value={form.budget} onChange={set("budget")}>
-                  <option value="">Budget (optional)</option>
-                  {BUDGETS.map((b) => (
-                    <option key={b}>{b}</option>
-                  ))}
-                </select>
-                <textarea
-                  className="field min-h-36 resize-y sm:col-span-2"
-                  placeholder="Tell us about your idea — what should it do, and who is it for? *"
-                  aria-label="Your message"
-                  required
-                  minLength={10}
-                  maxLength={4000}
-                  value={form.message}
-                  onChange={set("message")}
-                />
+                <div className="grid gap-2">
+                  <Label htmlFor="c-name">Full name *</Label>
+                  <Input id="c-name" placeholder="Ada Okafor" required value={form.name} onChange={set("name")} maxLength={100} autoComplete="name" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="c-email">Email *</Label>
+                  <Input id="c-email" type="email" placeholder="you@company.com" required value={form.email} onChange={set("email")} maxLength={160} autoComplete="email" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="c-phone">Phone</Label>
+                  <Input id="c-phone" type="tel" placeholder="+234…" value={form.phone} onChange={set("phone")} maxLength={40} autoComplete="tel" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="c-company">Company</Label>
+                  <Input id="c-company" placeholder="Optional" value={form.company} onChange={set("company")} maxLength={120} autoComplete="organization" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="c-service">What do you need?</Label>
+                  <Select value={form.service || undefined} onValueChange={(v) => setForm({ ...form, service: v })}>
+                    <SelectTrigger id="c-service">
+                      <SelectValue placeholder="Choose a service" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {content.services.map((sv) => (
+                        <SelectItem key={sv.title} value={sv.title}>
+                          {sv.title}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="Something else">Something else</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="c-budget">Budget</Label>
+                  <Select value={form.budget || undefined} onValueChange={(v) => setForm({ ...form, budget: v })}>
+                    <SelectTrigger id="c-budget">
+                      <SelectValue placeholder="Optional" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {BUDGETS.map((b) => (
+                        <SelectItem key={b} value={b}>
+                          {b}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2 sm:col-span-2">
+                  <Label htmlFor="c-message">Your idea *</Label>
+                  <Textarea
+                    id="c-message"
+                    className="min-h-36"
+                    placeholder="What should it do, and who is it for?"
+                    required
+                    minLength={10}
+                    maxLength={4000}
+                    value={form.message}
+                    onChange={set("message")}
+                  />
+                </div>
                 {/* Honeypot: hidden from people, tempting to bots */}
                 <input type="text" name="website" tabIndex={-1} autoComplete="off" value={form.website} onChange={set("website")} className="hidden" aria-hidden />
                 {state === "error" && <p className="text-sm text-coral sm:col-span-2">{error}</p>}
                 <div className="flex flex-wrap items-center justify-between gap-3 sm:col-span-2">
                   <p className="font-mono text-[10px] text-faint">Your details are only used to reply to you.</p>
-                  <button type="submit" disabled={state === "sending"} className="btn-primary">
-                    {state === "sending" ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+                  <Button type="submit" size="lg" disabled={state === "sending"}>
+                    {state === "sending" ? <Loader2 className="animate-spin" /> : <Send />}
                     {state === "sending" ? "Sending…" : "Send message"}
-                  </button>
+                  </Button>
                 </div>
               </motion.form>
             )}
