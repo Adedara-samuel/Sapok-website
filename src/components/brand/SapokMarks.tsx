@@ -4,6 +4,9 @@ import { useId } from "react";
 // Keep these in sync with public/brand/*.svg.
 export const SAPOK_TEAL = ["#5eead4", "#00c896"] as const;
 
+/** Outline of the SAPOK S (100×100 grid) — shared by the mark and the boot animation. */
+export const SAPOK_S_PATH = "M84 10C64 11 38 14 27 25C15 37 20 51 36 57L56 64C63 67 63 73 56 77C46 83 30 86 14 89C30 92 54 93 69 87C85 81 89 66 79 56C72 49 62 46 52 42L45 39C38 36 38 31 45 28C55 22 68 16 84 10Z";
+
 function Teal({ id }: { id: string }) {
   return (
     <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
@@ -28,7 +31,7 @@ export function SapokMark({ className, title = "SAPOK TECH" }: MarkProps) {
       </defs>
       <path
         fill={`url(#${id})`}
-        d="M84 10C64 11 38 14 27 25C15 37 20 51 36 57L56 64C63 67 63 73 56 77C46 83 30 86 14 89C30 92 54 93 69 87C85 81 89 66 79 56C72 49 62 46 52 42L45 39C38 36 38 31 45 28C55 22 68 16 84 10Z"
+        d={SAPOK_S_PATH}
       />
     </svg>
   );
