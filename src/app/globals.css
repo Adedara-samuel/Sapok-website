@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+/* Dark is the default theme; light is opt-in via <html class="light">. Lets shadcn's dark: styles follow that. */
+@custom-variant dark (&:where(:root:not(.light), :root:not(.light) *));
 
 /* SAPOK TECH design tokens — deep green-black canvas, SAPOK teal as the signature, coral for action. */
 :root {
@@ -41,6 +45,29 @@
   --color-teal: var(--teal);
   --color-teal-deep: var(--teal-deep);
   --color-coral: var(--coral);
+
+  /* shadcn/ui tokens, mapped onto the SAPOK palette (follow light/dark automatically) */
+  --color-background: var(--ink);
+  --color-foreground: var(--paper);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--paper);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--paper);
+  --color-primary: var(--teal-deep);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--raised);
+  --color-secondary-foreground: var(--paper);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--raised);
+  --color-accent-foreground: var(--paper);
+  --color-destructive: var(--coral);
+  --color-input: var(--line);
+  --color-ring: var(--teal);
+  --color-border: var(--line);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-montserrat), var(--font-inter), sans-serif;

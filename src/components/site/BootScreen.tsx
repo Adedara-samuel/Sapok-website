@@ -137,13 +137,13 @@ export default function BootScreen({ assets, onReveal }: { assets: string[]; onR
       ))}
 
       {/* Boot log */}
-      <div className="absolute left-8 top-10 max-w-[min(92vw,420px)] font-mono text-[11px] leading-6 text-[#8fb3a8] sm:left-12 sm:top-12 sm:text-xs">
+      <div className="absolute inset-x-8 top-16 font-mono text-[10.5px] leading-6 text-[#8fb3a8] sm:inset-x-auto sm:left-12 sm:top-12 sm:w-[420px] sm:text-xs">
         {LOG.slice(0, logShown).map(([k, v], i) => (
           <motion.div key={k} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.25 }} className="flex gap-2">
             <span className="text-[#5eead4]">{i === logShown - 1 && pct < 100 ? "›" : "✓"}</span>
-            <span>{k}</span>
+            <span className="whitespace-nowrap">{k}</span>
             <span className="min-w-4 flex-1 translate-y-[-3px] overflow-hidden whitespace-nowrap text-[#2a4a41]">.........................................</span>
-            <span className="text-[#ecfdf7]">{v}</span>
+            <span className="min-w-0 truncate text-[#ecfdf7]">{v}</span>
           </motion.div>
         ))}
       </div>
@@ -199,7 +199,7 @@ export default function BootScreen({ assets, onReveal }: { assets: string[]; onR
         <div className="font-display text-[clamp(1.8rem,6vw,3.2rem)] font-extrabold tracking-[0.18em]">
           <Decode text={WORD} start={progress > 0.12 || !!reduce} className="text-gradient" />
         </div>
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: progress > 0.45 ? 1 : 0 }} className="mt-2 font-mono text-[11px] uppercase tracking-[0.3em] text-[#8fb3a8]">
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: progress > 0.45 ? 1 : 0 }} className="mt-2 px-6 font-mono text-[10px] uppercase tracking-[0.16em] text-[#8fb3a8] sm:text-[11px] sm:tracking-[0.3em]">
           If you can think it, we can build it
         </motion.p>
       </div>
