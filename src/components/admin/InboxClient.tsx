@@ -4,6 +4,19 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Archive, ArrowLeft, Check, Mail, MailOpen, MessageCircle, Phone, Search, Trash2 } from "lucide-react";
 import { phoneDigits, type Enquiry, type EnquiryStatus } from "@/lib/content";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const FILTERS: ("all" | EnquiryStatus)[] = ["all", "new", "read", "archived"];
 
@@ -36,7 +49,6 @@ export default function InboxClient({ initial, openId }: { initial: Enquiry[]; o
   };
 
   const remove = async (id: string) => {
-    if (!confirm("Delete this enquiry permanently?")) return;
     setBusy(true);
     const res = await fetch(`/api/admin/enquiries/${id}`, { method: "DELETE" });
     if (res.ok) {
@@ -74,7 +86,7 @@ export default function InboxClient({ initial, openId }: { initial: Enquiry[]; o
         </div>
         <label className="relative flex-1">
           <Search className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-faint" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="grep name, email, idea…" className="field !rounded-full !py-2 pl-10 font-mono text-sm" aria-label="Search enquiries" />
+          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="grep name, email, idea…" className="h-10 rounded-full pl-10 font-mono md:text-sm" aria-label="Search enquiries" />
         </label>
       </div>
 
@@ -112,23 +124,41 @@ export default function InboxClient({ initial, openId }: { initial: Enquiry[]; o
                 <span className="chip">{current.emailed ? "✓ emailed" : "not emailed"}</span>
                 <span className="ml-auto flex gap-1.5">
                   {current.status !== "read" && (
-                    <button disabled={busy} onClick={() => setStatus(current.id, "read")} className="btn-ghost !px-3 !py-1.5 text-xs" title="Mark as read">
-                      <Check className="size-3.5" /> Read
-                    </button>
+                    <Button variant="outline" size="sm" disabled={busy} onClick={() => setStatus(current.id, "read")} title="Mark as read">
+                      <Check /> Read
+                    </Button>
                   )}
                   {current.status !== "new" && (
-                    <button disabled={busy} onClick={() => setStatus(current.id, "new")} className="btn-ghost !px-3 !py-1.5 text-xs" title="Mark as unread">
-                      <MailOpen className="size-3.5" /> Unread
-                    </button>
+                    <Button variant="outline" size="sm" disabled={busy} onClick={() => setStatus(current.id, "new")} title="Mark as unread">
+                      <MailOpen /> Unread
+                    </Button>
                   )}
                   {current.status !== "archived" && (
-                    <button disabled={busy} onClick={() => setStatus(current.id, "archived")} className="btn-ghost !px-3 !py-1.5 text-xs" title="Archive">
-                      <Archive className="size-3.5" /> Archive
-                    </button>
+                    <Button variant="outline" size="sm" disabled={busy} onClick={() => setStatus(current.id, "archived")} title="Archive">
+                      <Archive /> Archive
+                    </Button>
                   )}
-                  <button disabled={busy} onClick={() => remove(current.id)} className="btn-ghost !px-3 !py-1.5 text-xs hover:!border-coral hover:!text-coral" title="Delete">
-                    <Trash2 className="size-3.5" />
-                  </button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="outline" size="sm" disabled={busy} className="hover:border-coral hover:text-coral" title="Delete" aria-label="Delete enquiry">
+                        <Trash2 />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete this enquiry?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          The message from {current.name} will be removed permanently. Archive it instead if you might need it later.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction className="bg-coral text-white hover:bg-coral/90" onClick={() => remove(current.id)}>
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </span>
               </div>
 
@@ -157,17 +187,23 @@ export default function InboxClient({ initial, openId }: { initial: Enquiry[]; o
                 <div className="mt-6 whitespace-pre-wrap rounded-2xl border border-line bg-ink/60 p-5 leading-relaxed">{current.message}</div>
 
                 <div className="mt-6 flex flex-wrap gap-2">
-                  <a href={`mailto:${current.email}?subject=${encodeURIComponent("Re: your enquiry to SAPOK TECH")}`} className="btn-primary">
-                    <Mail className="size-4" /> Reply by email
-                  </a>
+                  <Button asChild>
+                    <a href={`mailto:${current.email}?subject=${encodeURIComponent("Re: your enquiry to SAPOK TECH")}`}>
+                      <Mail /> Reply by email
+                    </a>
+                  </Button>
                   {current.phone && (
                     <>
-                      <a href={`https://wa.me/${phoneDigits(current.phone)}`} target="_blank" rel="noopener noreferrer" className="btn-ghost">
-                        <MessageCircle className="size-4" /> WhatsApp
-                      </a>
-                      <a href={`tel:+${phoneDigits(current.phone)}`} className="btn-ghost">
-                        <Phone className="size-4" /> Call
-                      </a>
+                      <Button asChild variant="outline">
+                        <a href={`https://wa.me/${phoneDigits(current.phone)}`} target="_blank" rel="noopener noreferrer">
+                          <MessageCircle /> WhatsApp
+                        </a>
+                      </Button>
+                      <Button asChild variant="outline">
+                        <a href={`tel:+${phoneDigits(current.phone)}`}>
+                          <Phone /> Call
+                        </a>
+                      </Button>
                     </>
                   )}
                 </div>

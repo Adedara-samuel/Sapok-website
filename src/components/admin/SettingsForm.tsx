@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { Check, KeyRound, Loader2, ShieldAlert } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function SettingsForm({ email: initialEmail, lastChanged }: { email: string; lastChanged: string }) {
   const [email, setEmail] = useState(initialEmail);
@@ -52,30 +55,30 @@ export default function SettingsForm({ email: initialEmail, lastChanged }: { ema
       </div>
 
       <form onSubmit={submit} className="panel space-y-4 p-6">
-        <label className="block">
-          <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Sign-in email</span>
-          <input className="field" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" />
-        </label>
-        <label className="block">
-          <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Current password</span>
-          <input className="field" type="password" required value={currentPassword} onChange={(e) => setCurrent(e.target.value)} autoComplete="current-password" />
-        </label>
+        <div className="grid gap-2">
+          <Label htmlFor="set-email">Sign-in email</Label>
+          <Input id="set-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="set-current">Current password</Label>
+          <Input id="set-current" type="password" required value={currentPassword} onChange={(e) => setCurrent(e.target.value)} autoComplete="current-password" />
+        </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className="block">
-            <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.14em] text-muted">New password</span>
-            <input className="field" type="password" value={newPassword} onChange={(e) => setNext(e.target.value)} autoComplete="new-password" placeholder="leave blank to keep" />
-          </label>
-          <label className="block">
-            <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Confirm new password</span>
-            <input className="field" type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} autoComplete="new-password" />
-          </label>
+          <div className="grid gap-2">
+            <Label htmlFor="set-new">New password</Label>
+            <Input id="set-new" type="password" value={newPassword} onChange={(e) => setNext(e.target.value)} autoComplete="new-password" placeholder="leave blank to keep" />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="set-confirm">Confirm new password</Label>
+            <Input id="set-confirm" type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} autoComplete="new-password" />
+          </div>
         </div>
         <div className="flex items-center justify-between gap-3 pt-2">
           <span className={`font-mono text-xs ${state === "error" ? "text-coral" : "text-teal"}`}>{state === "error" ? `! ${msg}` : state === "saved" ? `✓ ${msg}` : ""}</span>
-          <button type="submit" disabled={state === "saving"} className="btn-primary">
-            {state === "saving" ? <Loader2 className="size-4 animate-spin" /> : state === "saved" ? <Check className="size-4" /> : <KeyRound className="size-4" />}
+          <Button type="submit" disabled={state === "saving"}>
+            {state === "saving" ? <Loader2 className="animate-spin" /> : state === "saved" ? <Check /> : <KeyRound />}
             Save
-          </button>
+          </Button>
         </div>
       </form>
     </div>

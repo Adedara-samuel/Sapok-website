@@ -6,6 +6,9 @@ import { motion } from "framer-motion";
 import { Loader2, Lock, ShieldCheck } from "lucide-react";
 import { SapokMark, SapokWordmark } from "@/components/brand/SapokMarks";
 import ThemeToggle from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -50,14 +53,20 @@ export default function LoginForm() {
           <p className="mt-6 font-mono text-xs text-teal">&gt; authenticate --role owner</p>
           <h1 className="mt-1 font-display text-2xl font-extrabold">Admin console</h1>
 
-          <form onSubmit={submit} className="mt-6 space-y-3">
-            <input className="field font-mono" type="email" autoComplete="username" placeholder="email" aria-label="Email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input className="field font-mono" type="password" autoComplete="current-password" placeholder="password" aria-label="Password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+          <form onSubmit={submit} className="mt-6 space-y-4">
+            <div className="grid gap-2">
+              <Label htmlFor="admin-email">Email</Label>
+              <Input id="admin-email" className="font-mono" type="email" autoComplete="username" placeholder="you@sapoktech.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="admin-password">Password</Label>
+              <Input id="admin-password" className="font-mono" type="password" autoComplete="current-password" placeholder="••••••••" required value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
             {error && <p className="font-mono text-xs text-coral">! {error}</p>}
-            <button type="submit" disabled={busy} className="btn-primary w-full">
-              {busy ? <Loader2 className="size-4 animate-spin" /> : <Lock className="size-4" />}
+            <Button type="submit" size="lg" disabled={busy} className="w-full">
+              {busy ? <Loader2 className="animate-spin" /> : <Lock />}
               {busy ? "Verifying…" : "Sign in"}
-            </button>
+            </Button>
           </form>
           <p className="mt-6 flex items-center gap-2 font-mono text-[10px] text-faint">
             <ShieldCheck className="size-3.5 text-teal" /> encrypted session · rate-limited · owner only
