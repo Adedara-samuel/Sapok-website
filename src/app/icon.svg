@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#00c896"/></linearGradient></defs><path fill="url(#g)" d="
+  M84 10
+  C64 11 38 14 27 25
+  C15 37 20 51 36 57
+  L56 64
+  C63 67 63 73 56 77
+  C46 83 30 86 14 89
+  C30 92 54 93 69 87
+  C85 81 89 66 79 56
+  C72 49 62 46 52 42
+  L45 39
+  C38 36 38 31 45 28
+  C55 22 68 16 84 10 Z"/></svg>

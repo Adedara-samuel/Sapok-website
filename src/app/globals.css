@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+/* SAPOK TECH design tokens — deep green-black canvas, SAPOK teal as the signature, coral for action. */
+:root {
+  --ink: #020c0a;
+  --surface: #071713;
+  --raised: #0c211b;
+  --paper: #ecfdf7;
+  --muted: #8fb3a8;
+  --faint: #4d6d64;
+  --line: #133229;
+  --teal: #5eead4;
+  --teal-deep: #00c896;
+  --coral: #ff7a59;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-paper: var(--paper);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-teal: var(--teal);
+  --color-teal-deep: var(--teal-deep);
+  --color-coral: var(--coral);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), var(--font-inter), sans-serif;
+  --font-brand: var(--font-montserrat), sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+  html,
+  body {
+    height: 100%;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--teal-deep);
+    color: var(--ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .text-gradient {
+    background: linear-gradient(120deg, var(--teal), var(--teal-deep) 60%, #b4ffe9);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 999px;
+    background: linear-gradient(120deg, var(--teal), var(--teal-deep));
+    color: var(--ink);
+    padding: 0.85rem 1.4rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 10px 30px -12px color-mix(in srgb, var(--teal-deep) 70%, transparent);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px -12px color-mix(in srgb, var(--teal-deep) 90%, transparent);
+  }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    transform: none;
+  }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    padding: 0.85rem 1.4rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--paper);
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    padding: 0.3rem 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .field {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--ink) 70%, transparent);
+    padding: 0.8rem 1rem;
+    color: var(--paper);
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field::placeholder {
+    color: var(--faint);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--teal) 14%, transparent);
+  }
+  .panel {
+    border-radius: 28px;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--surface) 80%, transparent);
+    backdrop-filter: blur(14px);
+  }
+  .chapter-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+    overscroll-behavior: contain;
+  }
+}
+
+/* The custom cursor replaces the native one on fine pointers only (see Cursor.tsx) */
+html.custom-cursor,
+html.custom-cursor a,
+html.custom-cursor button,
+html.custom-cursor [role="button"],
+html.custom-cursor label,
+html.custom-cursor select {
+  cursor: none;
+}
+
+/* ---------- ambient life ---------- */
+
+.aurora {
+  position: fixed;
+  inset: -25%;
+  pointer-events: none;
+  background:
+    radial-gradient(30% 30% at 20% 20%, color-mix(in srgb, var(--teal-deep) 22%, transparent), transparent 70%),
+    radial-gradient(28% 28% at 80% 30%, color-mix(in srgb, var(--teal) 14%, transparent), transparent 70%),
+    radial-gradient(30% 30% at 60% 85%, color-mix(in srgb, #1e8f7a 18%, transparent), transparent 70%);
+  filter: blur(10px);
+  animation: aurora 26s ease-in-out infinite alternate;
+}
+@keyframes aurora {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(-5%, 4%, 0) rotate(8deg) scale(1.05); }
+  100% { transform: translate3d(4%, -3%, 0) rotate(-6deg) scale(1); }
+}
+
+.grid-floor {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--teal) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--teal) 9%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(70% 60% at 50% 40%, #000, transparent);
+  animation: grid-drift 20s linear infinite;
+}
+@keyframes grid-drift {
+  to { background-position: 56px 56px, 56px 56px; }
+}
+
+.spin-slow { animation: spin 40s linear infinite; }
+.spin-rev { animation: spin 28s linear infinite reverse; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.flow { animation: flow 1.6s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -11; } }
+
+.marquee { animation: marquee 36s linear infinite; }
+@keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
+
+.shimmer {
+  background: linear-gradient(110deg, transparent 30%, color-mix(in srgb, var(--teal) 25%, transparent) 50%, transparent 70%);
+  background-size: 250% 100%;
+  animation: shimmer 2.4s linear infinite;
+}
+@keyframes shimmer { to { background-position: -150% 0; } }
+
+/* Spotlight that follows the cursor inside .spotlight cards (set --mx/--my from JS) */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--teal) 16%, transparent), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
