@@ -51,7 +51,7 @@ export const contentSchema = z.object({
   clients: z.array(z.object({ name: text(80), logo: url, link: url, sector: text(60) })).max(24),
   stats: z.array(z.object({ value: z.number().int().min(0).max(1_000_000), suffix: text(6), label: text(60) })).max(6),
   contact: z.object({
-    email: z.string().trim().email().max(120),
+    email: z.string().trim().max(120).pipe(z.email()),
     phone: text(40),
     whatsapp: text(40),
     address: text(240),
@@ -187,7 +187,7 @@ export const defaultContent: SiteContent = {
   contact: {
     email: "sapoktech.c@gmail.com",
     phone: "+234 724 099 7853",
-    whatsapp: "+234 724 099 7853",
+    whatsapp: "+234 909 099 7853",
     address: "14, Tree of Life, off RHV Road, Redemption City, Ogun State, Nigeria",
     hours: "Mon – Sat · 9:00 – 18:00 WAT",
   },
@@ -211,7 +211,7 @@ export function phoneDigits(phone: string) {
 
 export const enquiryInputSchema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(100),
-  email: z.string().trim().email("Please enter a valid email").max(160),
+  email: z.string().trim().max(160).pipe(z.email("Please enter a valid email")),
   phone: z.string().trim().max(40).optional().default(""),
   company: z.string().trim().max(120).optional().default(""),
   service: z.string().trim().max(80).optional().default(""),

@@ -15,6 +15,21 @@
   color-scheme: dark;
 }
 
+/* Light theme — same identity, daylight surfaces. Teal is deepened so text keeps its contrast. */
+:root.light {
+  --ink: #f3faf7;
+  --surface: #ffffff;
+  --raised: #e7f4ef;
+  --paper: #052019;
+  --muted: #45665d;
+  --faint: #86a39a;
+  --line: #d3e7df;
+  --teal: #0b9b84;
+  --teal-deep: #057a63;
+  --coral: #e2552f;
+  color-scheme: light;
+}
+
 @theme inline {
   --color-ink: var(--ink);
   --color-surface: var(--surface);
