@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ExternalLink, Inbox, LayoutDashboard, LogOut, Menu, PenSquare, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ExternalLink, Inbox, KeyRound, LayoutDashboard, LogOut, Menu, PenSquare, X } from "lucide-react";
 import { SapokMark, SapokWordmark } from "@/components/brand/SapokMarks";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -11,6 +12,7 @@ const NAV = [
   { href: "/admin", label: "Dashboard", cmd: "dash", icon: LayoutDashboard },
   { href: "/admin/inbox", label: "Inbox", cmd: "inbox", icon: Inbox },
   { href: "/admin/content", label: "Website content", cmd: "content", icon: PenSquare },
+  { href: "/admin/settings", label: "Settings", cmd: "settings", icon: KeyRound },
 ];
 
 export interface SystemStatus {
@@ -46,10 +48,12 @@ function Clock() {
 export default function AdminShell({ status, children }: { status: SystemStatus; children: React.ReactNode }) {
   const path = usePathname();
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const logout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
-    window.location.href = "/admin/login";
+    router.replace("/admin/login");
+    router.refresh();
   };
 
   const sidebar = (

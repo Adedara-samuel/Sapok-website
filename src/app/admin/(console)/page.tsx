@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Inbox, Mail, PenSquare, Sparkles } from "lucide-react";
+import type { Enquiry } from "@/lib/content";
 import { store } from "@/lib/store";
 
 function ago(iso: string) {
@@ -10,15 +11,19 @@ function ago(iso: string) {
   return `${Math.round(s / 86400)}d ago`;
 }
 
-export default async function Dashboard() {
-  const enquiries = await store().listEnquiries();
+function summarise(enquiries: Enquiry[]) {
   const week = Date.now() - 7 * 86400_000;
-  const stats = [
+  return [
     { label: "New", value: enquiries.filter((e) => e.status === "new").length, tone: "text-coral" },
     { label: "This week", value: enquiries.filter((e) => new Date(e.createdAt).getTime() > week).length, tone: "text-teal" },
     { label: "All enquiries", value: enquiries.length, tone: "text-paper" },
     { label: "Emailed to you", value: enquiries.filter((e) => e.emailed).length, tone: "text-paper" },
   ];
+}
+
+export default async function Dashboard() {
+  const enquiries = await store().listEnquiries();
+  const stats = summarise(enquiries);
   const recent = enquiries.slice(0, 8);
 
   return (

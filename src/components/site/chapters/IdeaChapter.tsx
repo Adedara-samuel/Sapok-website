@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Check, CornerDownLeft, RotateCcw, Sparkles } from "lucide-react";
 import type { ChapterProps } from "../chapters";
@@ -39,7 +39,7 @@ function appName(idea: string) {
 /** Chapter 1 — "Idea → Reality": a visitor types an idea and watches it get built. */
 export default function IdeaChapter({ content, go, setIdea }: ChapterProps) {
   const reduce = useReducedMotion();
-  const ideas = content.hero.ideas.length ? content.hero.ideas : ["A booking app for my salon"];
+  const ideas = useMemo(() => (content.hero.ideas.length ? content.hero.ideas : ["A booking app for my salon"]), [content.hero.ideas]);
   const [value, setValue] = useState("");
   const [placeholder, setPlaceholder] = useState("");
   const [built, setBuilt] = useState("");

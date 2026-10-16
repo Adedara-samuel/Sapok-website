@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2, Lock, ShieldCheck } from "lucide-react";
 import { SapokMark, SapokWordmark } from "@/components/brand/SapokMarks";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export default function LoginForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -18,7 +20,8 @@ export default function LoginForm() {
     setError("");
     const res = await fetch("/api/admin/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
     if (res.ok) {
-      window.location.href = "/admin";
+      router.replace("/admin");
+      router.refresh();
       return;
     }
     const data = await res.json().catch(() => ({}));
