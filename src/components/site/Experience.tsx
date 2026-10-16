@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion, useTransform } from "framer-motion";
 import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, Menu, X } from "lucide-react";
 import type { SiteContent } from "@/lib/content";
@@ -8,6 +8,7 @@ import { SapokMark, SapokWordmark } from "@/components/brand/SapokMarks";
 import { CHAPTERS, type ChapterId } from "./chapters";
 import { useSceneScroll } from "./useChapterScroll";
 import Cursor from "./Cursor";
+import BootScreen from "./BootScreen";
 import ThemeToggle from "@/components/ThemeToggle";
 import IdeaChapter from "./chapters/IdeaChapter";
 import EcosystemChapter from "./chapters/EcosystemChapter";
@@ -48,6 +49,9 @@ export default function Experience({ content }: { content: SiteContent }) {
   const [direction, setDirection] = useState(1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [idea, setIdea] = useState("");
+  const [revealed, setRevealed] = useState(false);
+  // Images worth having ready before the curtain lifts
+  const bootAssets = useMemo(() => [...content.clients.map((c) => c.logo).filter(Boolean), "/products/withu.jpg"], [content.clients]);
 
   const chapter = CHAPTERS[index];
 
@@ -171,7 +175,7 @@ export default function Experience({ content }: { content: SiteContent }) {
           >
             <motion.div className="h-full" style={{ y: lift }}>
               <div ref={registerScroller(chapter.id)} onScroll={(e) => onScrollerScroll(e.currentTarget)} className="chapter-scroll h-full overflow-y-auto overflow-x-hidden">
-                <Chapter content={content} go={go} idea={idea} setIdea={setIdea} />
+                {revealed ? <Chapter content={content} go={go} idea={idea} setIdea={setIdea} /> : null}
               </div>
             </motion.div>
           </motion.section>
@@ -273,6 +277,7 @@ export default function Experience({ content }: { content: SiteContent }) {
         )}
       </AnimatePresence>
 
+      <BootScreen assets={bootAssets} onReveal={() => setRevealed(true)} />
       <Cursor />
     </div>
   );
